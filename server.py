@@ -1,6 +1,12 @@
+
+
 from flask import Flask, render_template, request, jsonify,session,url_for,redirect
 #from pymongo import MongoClient
+import pickle
+import pandas as pd
+
 import os
+
 from database import get_connection
 
 
@@ -25,7 +31,7 @@ def login():
         conn.close()
         if user:
             print(user)
-            session['user'] = user[1]  # Store user info in session
+            session['user'] = user[2]  # Store user info in session
             return redirect(url_for('dashboard'))  # Redirect to dashboard
             #return "login sus"
         else:
@@ -66,7 +72,39 @@ def signup():
 def dashboard():
     if 'user' not in session:
         return redirect(url_for('login'))
-    return f"<h1>Welcome, {session['user']}!</h1><p><a href='/logout'>Logout</a></p>"
+    user_email=session['user']
+    conn=get_connection()
+    cursor=conn.cursor()
+    cursor.execute("select department from users where email=%s",(user_email,))
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if not result:
+        return "user not found"
+
+    user_dept=result[0]
+    with open("event_recommendation_model.pkl", "rb") as f:
+        model = pickle.load(f)
+    with open("event_mlb.pkl", "rb") as f:
+        mlb = pickle.load(f)
+
+    all_events = mlb.classes_
+
+    user_input=mlb.transform([user_dept])
+
+    # Create dummy input for prediction
+
+    test_df = pd.DataFrame(user_input, columns=all_events)
+    predicted_proba = model.predict_proba(test_df)
+
+    top_indices = predicted_proba[0].argsort()[::-1]
+    recommended_events = [all_events[i] for i in top_indices[:6]]
+
+    # Render dashboard.html with events
+    return render_template("dashboard.html", events=recommended_events, user_dept=user_dept)
+
+
 
 @app.route("/logout")
 def logout():
@@ -90,6 +128,16 @@ def orglogin():
         else:
             return render_template("orglogin.html", error="Invalid organizer credentials")
     return render_template("orglogin.html")
+
+
+@app.route("/events")
+def all_events():
+    with open("event_mlb.pkl", "rb") as f:
+        mlb = pickle.load(f)
+
+    all_events = list(mlb.classes_)  # Get all event names
+    return render_template("all_events.html", events=all_events)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

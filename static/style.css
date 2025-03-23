@@ -2,6 +2,10 @@ body{
     background-image: linear-gradient(to right, rgb(3, 3, 3) , rgb(71, 60, 60));
 }
 
+#event-display-div{
+background-image: linear-gradient(to right, rgb(3, 3, 3) , rgb(71, 60, 60));
+}
+
 
     /* Chatbot Styling */
     #chatbot-container {
