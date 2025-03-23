@@ -88,7 +88,10 @@
                 <li>Network with civil engineering leaders</li>
                 <li>Explore cutting-edge design tools</li>
             </ul>
-            <button class="register-btn" onclick="alert('Registration coming soon! Please check back later.')">Register Now</button>
+<form action="{{ url_for('register_event') }}" method="POST">
+    <input type="hidden" name="event_name" value="AI Conference 2025">
+    <button type="submit" class="register-btn">Register Now</button>
+</form>
         </div>
     </div>
 

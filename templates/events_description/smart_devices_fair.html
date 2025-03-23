@@ -89,8 +89,10 @@
                 <li>Networking with industry experts</li>
                 <li>Exclusive product launches</li>
             </ul>
-            <button class="register-btn" onclick="alert('Registration coming soon! Please check back later.')">Register Now</button>
-        </div>
+<form action="{{ url_for('register_event') }}" method="POST">
+    <input type="hidden" name="event_name" value="AI Conference 2025">
+    <button type="submit" class="register-btn">Register Now</button>
+</form>        </div>
     </div>
 
     <script>

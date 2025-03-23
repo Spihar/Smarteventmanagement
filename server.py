@@ -1,6 +1,6 @@
 
 
-from flask import Flask, render_template, request, jsonify,session,url_for,redirect
+from flask import Flask, render_template, request, jsonify,session,url_for,redirect, flash
 #from pymongo import MongoClient
 import pickle
 import pandas as pd
@@ -14,11 +14,25 @@ app = Flask(__name__)
 app.secret_key="hello"
 app.config['UPLOAD_FOLDER']='static/uploads'
 
-@app.route("/register_event", methods=["GET","POST"])
+@app.route("/register_event", methods=["POST"])
 def register_event():
-    if request.method=="GET":
-        email=session['user']
-        sendemail(email)
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    email = session['user']
+    event_name = request.form.get('event_name') or "AI Conference 2025"
+    event_date = "March 30, 2025"
+    venue = "Conference Hall A"
+
+    try:
+        sendemail(email, event_name, event_date, venue)
+        flash("✅ Registered successfully! Check your email for the QR code pass.")
+    except Exception as e:
+        print("❌ Email error:", e)
+        flash("There was an issue sending your email. Please try again later.")
+
+    return redirect(url_for('dashboard'))
+
 
 
 @app.route("/org_dashboard")
@@ -124,6 +138,12 @@ def dashboard():
     return render_template("dashboard.html", events=recommended_events, user_dept=user_dept)
 
 
+@app.route('/event/<event_name>')
+def event_description(event_name):
+    try:
+        return render_template(f"events_description/{event_name}.html")
+    except:
+        return "Event page not found", 404
 
 @app.route("/logout")
 def logout():
