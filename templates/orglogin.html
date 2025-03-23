@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interstellar - Login & Sign Up</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle, #0a0e1a, #020b18);
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            background: rgba(0, 10, 25, 0.9);
+            padding: 2.5rem;
+            border-radius: 10px;
+            border: 2px solid #00bfff;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.8);
+            width: min(350px, 90vw);
+            text-align: center;
+            position: relative;
+        }
+
+        .container h2 {
+            color: #00bfff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 45px 12px 40px;
+            background: transparent;
+            border: 2px solid #00bfff;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .input-box input:focus {
+            border-color: #008cff;
+            outline: none;
+        }
+
+        .input-box i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00bfff;
+            z-index: 1;
+        }
+
+        .input-box .fa-user,
+        .input-box .fa-envelope,
+        .input-box .fa-lock {
+            left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .input-box .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1;
+        }
+
+        .input-box .eye-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: #00bfff;
+            stroke-width: 2;
+            transition: stroke 0.3s;
+        }
+
+        .input-box .eye-icon:hover svg {
+            stroke: #00ccff;
+        }
+
+        .eye-icon.slash svg .slash-line {
+            display: block;
+        }
+
+        .eye-icon .slash-line {
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00bfff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #008cff;
+        }
+
+        .toggle-link {
+            margin-top: 1rem;
+            color: #00bfff;
+            font-size: 0.875rem;
+        }
+
+        .toggle-link a {
+            color: #00bfff;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hide forms by default */
+        .form-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="spaceCanvas" aria-hidden="true"></canvas>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginFormContainer">
+            <h2>organizer Login</h2>
+            <form id="loginForm" method="POST" action="/login">
+                <div class="input-box">
+                    <i class="fa-user" aria-hidden="true"></i>
+                    <input type="text" name="email" placeholder="Enter ID" required aria-label="User ID">
+                </div>
+                <div class="input-box">
+                    <i class="fa-lock" aria-hidden="true"></i>
+                    <input type="password" name="password" id="loginPassword" placeholder="Password" required aria-label="Password">
+                    <span class="eye-icon" id="toggleLoginPassword" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                            <line class="slash-line" x1="3" y1="21" x2="21" y2="3" stroke="#00bfff" stroke-width="2"/>
+                        </svg>
+                    </span>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Sign-Up Form -->
+
+    <script>
+        // Toggle between login and sign-up forms
+        const loginFormContainer = document.getElementById("loginFormContainer");
+        const signupFormContainer = document.getElementById("signupFormContainer");
+        const showSignupLink = document.getElementById("showSignup");
+        const showLoginLink = document.getElementById("showLogin");
+
+        showSignupLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            loginFormContainer.classList.add("form-hidden");
+            signupFormContainer.classList.remove("form-hidden");
+        });
+
+        showLoginLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            signupFormContainer.classList.add("form-hidden");
+            loginFormContainer.classList.remove("form-hidden");
+        });
+
+        // Password visibility toggle for login form
+        const loginPasswordField = document.getElementById("loginPassword");
+        const toggleLoginPasswordIcon = document.getElementById("toggleLoginPassword");
+
+        toggleLoginPasswordIcon.addEventListener("click", () => {
+            const isPassword = loginPasswordField.type === "password";
+            loginPasswordField.type = isPassword ? "text" : "password";
+            toggleLoginPasswordIcon.classList.toggle("slash", isPassword);
+        });
+
+        // Password visibility toggle for sign-up form
+        const signupPasswordField = document.getElementById("signupPassword");
+        const toggleSignupPasswordIcon = document.getElementById("toggleSignupPassword");
+
+        toggleSignupPasswordIcon.addEventListener("click", () => {
+            const isPassword = signupPasswordField.type === "password";
+            signupPasswordField.type = isPassword ? "text" : "password";
+            toggleSignupPasswordIcon.classList.toggle("slash", isPassword);
+        });
+
+        // Star animation
+        const canvas = document.getElementById("spaceCanvas");
+        const ctx = canvas.getContext("2d");
+        let stars = [];
+        const numStars = 200;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (!stars.length) createStars();
+        }
+
+        function createStars() {
+            stars = Array.from({ length: numStars }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                speed: Math.random() * 2 + 0.5,
+                size: Math.random() * 2
+            }));
+        }
+
+        function updateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y -= star.speed;
+                if (star.y < 0) {
+                    star.y = canvas.height;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(updateStars);
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+        updateStars();
+    </script>
+</body>
+</html>
