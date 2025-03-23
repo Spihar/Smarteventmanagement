@@ -6,190 +6,404 @@
     <title>Event Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        /* Chatbot Styling */
+        #chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #chatbot-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbot-messages {
+            flex: 1;
+            max-height: calc(500px - 70px);
+            padding: 15px;
+            overflow-y: scroll;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 20%);
+        }
+
+        #chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chatbot-messages::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 3px;
+        }
+
+        #chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        #chatbot-input input {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #chatbot-input button {
+            padding: 5px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background-color: #e9ecef;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .option-card {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option-card:hover {
+            background-color: #e9ecef;
+        }
+
+        .event-details {
+            margin: 5px 0;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+
+        #spaceCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+        }
+    </style>
 </head>
 <body>
-
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" >
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
-          <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-            <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-          </a>
+            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+            </a>
         </div>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="homepage.html" class="nav-link px-2 link-secondary">Home</a></li>
-          <li><a href="#" class="nav-link px-2">Events</a></li>
-          <li><a href="#" class="nav-link px-2"></a></li>
-          <li><a href="#" class="nav-link px-2">FAQs</a></li>
-          <li><a href="#" class="nav-link px-2">Contact Support</a></li>
+            <li><a href="homepage.html" class="nav-link px-2 link-secondary">Home</a></li>
+            <li><a href="" class="nav-link px-2">Events</a></li>
+            <li><a href="#" class="nav-link px-2">FAQs</a></li>
+            <li><a href="#" class="nav-link px-2">Contact Support</a></li>
         </ul>
 
         <div class="col-md-3 text-end" style="margin-right: 20px;">
-            <button type="button" class="btn btn-outline-primary me-3" id="organizer-btn">orgnizer</button>
-          <button type="button" class="btn btn-outline-primary me-2" id="login-btn">Login</button>
-          <button type="button" class="btn btn-primary" id="sign-up-btn">Sign-up</button>
+            <button type="button" class="btn btn-outline-primary me-3" id="organizer-btn">Organizer</button>
+            <button type="button" class="btn btn-outline-primary me-2" id="login-btn">Login</button>
+            <button type="button" class="btn btn-primary" id="sign-up-btn">Sign-up</button>
         </div>
-      </header>
-      <div class="album py-5 bg-body-tertiary" id="event-display-div">
-        <div class="container">
+    </header>
 
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-body-secondary">9 mins</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chatbot Container -->
-      <div id="chatbot-container">
+    <!-- Chatbot Container -->
+    <div id="chatbot-container">
         <div id="chatbot-header">Event Assistant</div>
         <div id="chatbot-messages"></div>
         <div id="chatbot-input">
-          <input type="text" id="chatbot-message" placeholder="Type a message...">
-          <button onclick="sendMessage()">Send</button>
+            <input type="text" id="chatbot-message" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
         </div>
-      </div>
-      <button id="chatbot-toggle">💬</button>
+    </div>
+    <button id="chatbot-toggle">💬</button>
 
+    <canvas id="spaceCanvas" aria-hidden="true"></canvas>
 
-      <canvas id="spaceCanvas" aria-hidden="true"></canvas>
-      <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="../static/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/script.js">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const chatbotMessages = document.getElementById('chatbot-messages');
+            let isChatOpen = false;
+            let selectedDepartment = null;
+            let selectedEvent = null;
+
+            const departments = ['DS', 'AIML', 'CS', 'IT'];
+
+            const departmentEvents = {
+                'DS': [
+                    { name: 'Data Science Symposium 2025', date: 'April 15, 2025', location: 'Main Auditorium' },
+                    { name: 'DS Hackathon', date: 'May 10, 2025', location: 'Tech Lab' }
+                ],
+                'AIML': [
+                    { name: 'AI & ML Conference', date: 'June 20, 2025', location: 'Conference Hall' },
+                    { name: 'ML Bootcamp', date: 'July 5, 2025', location: 'Training Room' }
+                ],
+                'CS': [
+                    { name: 'Coding Marathon', date: 'August 12, 2025', location: 'CS Lab' },
+                    { name: 'CS Expo', date: 'September 1, 2025', location: 'Exhibition Hall' }
+                ],
+                'IT': [
+                    { name: 'Cloud Computing Workshop', date: 'October 10, 2025', location: 'IT Center' },
+                    { name: 'Network Security Seminar', date: 'November 15, 2025', location: 'Seminar Room' }
+                ]
+            };
+
+            chatbotToggle.addEventListener('click', () => {
+                const isVisible = chatbotContainer.style.display === 'block';
+                chatbotContainer.style.display = isVisible ? 'none' : 'block';
+                if (!isVisible && !isChatOpen) {
+                    isChatOpen = true;
+                    startChatbot();
+                }
+            });
+
+            function startChatbot() {
+                appendMessage('Bot', 'Welcome to Event Assistant! I can help you explore events. Which department are you interested in?');
+                showDepartmentOptions();
+            }
+
+            function showDepartmentOptions() {
+                clearOptions();
+                departments.forEach(dept => {
+                    const div = createOption(dept, () => handleDepartmentSelection(dept));
+                    chatbotMessages.appendChild(div);
+                });
+                showNavigationOptions();
+            }
+
+            function handleDepartmentSelection(dept) {
+                selectedDepartment = dept;
+                selectedEvent = null;
+                appendMessage('You', dept);
+                clearOptions();
+                setTimeout(() => {
+                    appendMessage('Bot', Great choice! Here are upcoming events for ${dept}:);
+                    const events = departmentEvents[dept] || [];
+                    if (events.length === 0) {
+                        appendMessage('Bot', 'No events available right now.');
+                    } else {
+                        events.forEach(event => {
+                            const div = createOption(event.name, () => handleEventSelection(event));
+                            chatbotMessages.appendChild(div);
+                        });
+                    }
+                    showNavigationOptions();
+                }, 500);
+            }
+
+            function handleEventSelection(event) {
+                selectedEvent = event;
+                appendMessage('You', event.name);
+                clearOptions();
+                setTimeout(() => {
+                    appendMessage('Bot', Details for "${event.name}":);
+                    const ul = document.createElement('ul');
+                    ul.className = 'event-details';
+                    ul.innerHTML = `
+                        <li>Date: ${event.date}</li>
+                        <li>Location: ${event.location}</li>
+                    `;
+                    chatbotMessages.appendChild(ul);
+                    appendMessage('Bot', 'What would you like to do? Type "register" to sign up, "more" for details, or select another option.');
+                    showNavigationOptions();
+                }, 500);
+            }
+
+            function showNavigationOptions() {
+                if (selectedEvent) {
+                    const backToEvents = createOption('⬅ Back to Events', () => handleDepartmentSelection(selectedDepartment));
+                    chatbotMessages.appendChild(backToEvents);
+                }
+                if (selectedDepartment) {
+                    const backToDepts = createOption('⬅ Back to Departments', () => {
+                        selectedDepartment = null;
+                        selectedEvent = null;
+                        clearOptions();
+                        setTimeout(() => {
+                            appendMessage('Bot', 'Which department would you like to explore?');
+                            showDepartmentOptions();
+                        }, 500);
+                    });
+                    chatbotMessages.appendChild(backToDepts);
+                }
+                const restart = createOption('🔄 Restart', () => {
+                    selectedDepartment = null;
+                    selectedEvent = null;
+                    clearOptions();
+                    setTimeout(() => startChatbot(), 500);
+                });
+                chatbotMessages.appendChild(restart);
+            }
+
+            function createOption(text, onClick) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                div.className = 'option-card';
+                div.tabIndex = 0;
+                div.addEventListener('click', onClick);
+                div.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') onClick();
+                });
+                return div;
+            }
+
+            function clearOptions() {
+                const options = chatbotMessages.querySelectorAll('.option-card, .event-details');
+                options.forEach(opt => opt.remove());
+            }
+
+            function appendMessage(sender, text) {
+                const div = document.createElement('div');
+                div.textContent = ${sender}: ${text};
+                div.className = message ${sender === 'Bot' ? 'bot-message' : 'user-message'};
+                chatbotMessages.appendChild(div);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+
+            function sendMessage() {
+                const input = document.getElementById('chatbot-message');
+                const text = input.value.trim();
+                if (text) {
+                    appendMessage('You', text);
+                    setTimeout(() => {
+                        const lowerText = text.toLowerCase();
+                        if (lowerText.includes('register') && selectedEvent) {
+                            appendMessage('Bot', You want to register for "${selectedEvent.name}"! Registration opens soon—stay tuned! Anything else I can help with?);
+                        } else if (lowerText.includes('more') && selectedEvent) {
+                            appendMessage('Bot', More about "${selectedEvent.name}": It’s a great opportunity to network and learn. Want to know about speakers or agenda?);
+                        } else if (lowerText.includes('hi') || lowerText.includes('hello')) {
+                            appendMessage('Bot', 'Hello again! How can I assist you today?');
+                        } else if (lowerText.includes('thanks') || lowerText.includes('thank you')) {
+                            appendMessage('Bot', 'You’re welcome! Anything else?');
+                        } else {
+                            appendMessage('Bot', 'I’m not sure what you mean. Try selecting an option or ask about events!');
+                        }
+                        showNavigationOptions();
+                    }, 500);
+                    input.value = '';
+                }
+            }
+
+            // Starry Background with Movement
+            const canvas = document.getElementById('spaceCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            class Star {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.radius = Math.random() * 1.5;
+                    this.brightness = Math.random();
+                    this.dx = (Math.random() - 0.5) * 0.5; // Horizontal velocity (-0.25 to 0.25)
+                    this.dy = (Math.random() - 0.5) * 0.5; // Vertical velocity (-0.25 to 0.25)
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = rgba(255, 255, 255, ${this.brightness});
+                    ctx.fill();
+                }
+
+                update() {
+                    // Move the star
+                    this.x += this.dx;
+                    this.y += this.dy;
+
+                    // Bounce off edges
+                    if (this.x < 0 || this.x > canvas.width) this.dx = -this.dx;
+                    if (this.y < 0 || this.y > canvas.height) this.dy = -this.dy;
+
+                    // Optional: Twinkle effect
+                    this.brightness = Math.random();
+                }
+            }
+
+            const stars = [];
+            const starCount = 200;
+            for (let i = 0; i < starCount; i++) {
+                stars.push(new Star());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.draw();
+                    star.update();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        });
+    </script>
 </body>
 </html>

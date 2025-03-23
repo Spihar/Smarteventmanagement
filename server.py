@@ -6,13 +6,29 @@ import pickle
 import pandas as pd
 import qrcode
 import os
-
+from confemail import sendemail
 from database import get_connection
 
 
 app = Flask(__name__)
 app.secret_key="hello"
 app.config['UPLOAD_FOLDER']='static/uploads'
+
+@app.route("/register_event", methods=["GET","POST"])
+def register_event():
+    if request.method=="GET":
+        email=session['user']
+        sendemail(email)
+
+
+@app.route("/org_dashboard")
+def org_dashboard():
+    if 'organizer' not in session:
+        return redirect(url_for('orglogin'))
+
+    return render_template("orgdashboard.html")
+
+
 
 @app.route("/")
 def home():
@@ -114,23 +130,33 @@ def logout():
     session.pop('user',None)
     return redirect(url_for(login))
 
+
 @app.route("/orglogin", methods=["GET", "POST"])
 def orglogin():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
+
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM organizers WHERE email = %s AND password = %s", (email, password))
         organizer = cursor.fetchone()
         cursor.close()
         conn.close()
+
         if organizer:
-            session['organizer'] = organizer[1]
-            return redirect(url_for('org_dashboard'))
+            session['organizer'] = organizer[1]  # Assuming this is the organizer name or ID
+            return redirect(url_for('orgdashboard'))  # Match route name below
         else:
             return render_template("orglogin.html", error="Invalid organizer credentials")
+
     return render_template("orglogin.html")
+
+@app.route("/orgdashboard")
+def orgdashboard():
+    if 'organizer' not in session:
+        return redirect(url_for('orglogin'))  # Protect route
+    return render_template("orgdashboard.html", organizer=session['organizer'])
 
 
 @app.route("/events")
@@ -140,6 +166,23 @@ def all_events():
 
     all_events = list(mlb.classes_)  # Get all event names
     return render_template("all_events.html", events=all_events)
+
+@app.route("/validate_qr", methods=["POST"])
+def validate_qr():
+    data = request.get_json()
+    qr_data = data.get("qr_data")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM users WHERE photo_path = %s", (qr_data,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if user:
+        return jsonify({"message": f"Welcome {user[0]}! QR Code Validated."})
+    else:
+        return jsonify({"message": "Invalid QR Code!"}), 400
 
 
 if __name__ == "__main__":

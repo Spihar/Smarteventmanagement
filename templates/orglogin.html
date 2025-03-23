@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interstellar - Login & Sign Up</title>
+    <title>Interstellar - Organizer Login</title>
     <style>
         body {
             margin: 0;
@@ -150,14 +150,15 @@
             display: none;
         }
     </style>
+    </style>
 </head>
 <body>
     <canvas id="spaceCanvas" aria-hidden="true"></canvas>
     <div class="container">
-        <!-- Login Form -->
+        <!-- Organizer Login Form -->
         <div id="loginFormContainer">
-            <h2>organizer Login</h2>
-            <form id="loginForm" method="POST" action="/login">
+            <h2>Organizer Login</h2>
+            <form id="loginForm" method="POST" action="/orglogin">
                 <div class="input-box">
                     <i class="fa-user" aria-hidden="true"></i>
                     <input type="text" name="email" placeholder="Enter ID" required aria-label="User ID">
@@ -175,28 +176,9 @@
                 <button type="submit">Login</button>
             </form>
         </div>
-
-        <!-- Sign-Up Form -->
+    </div>
 
     <script>
-        // Toggle between login and sign-up forms
-        const loginFormContainer = document.getElementById("loginFormContainer");
-        const signupFormContainer = document.getElementById("signupFormContainer");
-        const showSignupLink = document.getElementById("showSignup");
-        const showLoginLink = document.getElementById("showLogin");
-
-        showSignupLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            loginFormContainer.classList.add("form-hidden");
-            signupFormContainer.classList.remove("form-hidden");
-        });
-
-        showLoginLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            signupFormContainer.classList.add("form-hidden");
-            loginFormContainer.classList.remove("form-hidden");
-        });
-
         // Password visibility toggle for login form
         const loginPasswordField = document.getElementById("loginPassword");
         const toggleLoginPasswordIcon = document.getElementById("toggleLoginPassword");
@@ -207,17 +189,7 @@
             toggleLoginPasswordIcon.classList.toggle("slash", isPassword);
         });
 
-        // Password visibility toggle for sign-up form
-        const signupPasswordField = document.getElementById("signupPassword");
-        const toggleSignupPasswordIcon = document.getElementById("toggleSignupPassword");
-
-        toggleSignupPasswordIcon.addEventListener("click", () => {
-            const isPassword = signupPasswordField.type === "password";
-            signupPasswordField.type = isPassword ? "text" : "password";
-            toggleSignupPasswordIcon.classList.toggle("slash", isPassword);
-        });
-
-        // Star animation
+        // Star background animation
         const canvas = document.getElementById("spaceCanvas");
         const ctx = canvas.getContext("2d");
         let stars = [];
