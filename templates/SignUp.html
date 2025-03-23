@@ -177,12 +177,7 @@
                 <input type="number" name="year" placeholder="Year (e.g. 1, 2, 3, 4)" min="1" max="5" required>
             </div>
 
-            <div class="input-box">
-                <i class="fa-image" aria-hidden="true"></i>
-                <input type="file" name="photo" accept="image/*" required>
-            </div>
-
-            <button type="submit">Sign Up</button>
+            <button type="submit" id="sbt-btn">Sign Up</button>
         </form>
 
         <p class="toggle-link">Already have an account? <a href="/login">Login</a></p>
@@ -238,6 +233,11 @@
                 passwordInput.setAttribute("type", type);
                 toggleBtn.classList.toggle("slash");
             });
+
+           const submitBtn =  document.getElementById("sbt-btn");
+           submitBtn.addEventListener('submit',function(){
+           location.href = "/dashboard";
+           })
         });
     </script>
 </body>

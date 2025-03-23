@@ -24,10 +24,12 @@ data = {
 }
 
 df = pd.DataFrame(data)
+print(df)
 
 # Encode events
 mlb = MultiLabelBinarizer()
 event_features = mlb.fit_transform(df['events'])
+print(event_features)
 event_df = pd.DataFrame(event_features, columns=mlb.classes_)
 
 # Combine features and labels

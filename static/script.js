@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     signInBtn.addEventListener('click', function () {
-        location.href = "/signup";
+        location.href = "/signup";"/dashboard";
     });
 
     organizerBtn.addEventListener('click', function () {

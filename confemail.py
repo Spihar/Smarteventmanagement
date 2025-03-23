@@ -1,10 +1,15 @@
 import smtplib
 import ssl
 from email.message import EmailMessage
+import MySQLdb
+from database import get_connection
 
 # Email credentials
 email_sender = 'interstellar.teamhack@gmail.com'
 email_password = 'cpoyinoslifitcxc'
+conn=get_connection()
+cursor=conn.cursor()
+cursor.execute("")
 email_receiver = ['harthik.cygnusx1@gmail.com']
 
 # File name of the QR code

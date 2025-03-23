@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify,session,url_for,redir
 #from pymongo import MongoClient
 import pickle
 import pandas as pd
-
+import qrcode
 import os
 
 from database import get_connection
@@ -39,6 +39,9 @@ def login():
             #return "login fail"
     return render_template("loginPage.html")
 
+
+
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -47,23 +50,23 @@ def signup():
         password = request.form.get("password")
         department = request.form.get("department")
         year = request.form.get("year")
-        photo = request.files.get("photo")  # important: use request.files for file input
-
-        # Save the uploaded photo
-        photo_filename = photo.filename
-        photo_path = os.path.join(app.config['UPLOAD_FOLDER'], photo_filename)
-        photo.save(photo_path)
-
-        # Save the data to DB
+        qr = qrcode.make(name)
+        qr_filename = f"{name}_qr.png"
+        qr_path = os.path.join(app.config['UPLOAD_FOLDER'], qr_filename)
+        qr.save(qr_path)
+        qr_url = url_for('static', filename=f'uploads/{qr_filename}')
+        print("Dynamic QR Code URL:", qr_url)  # for testing
         conn = get_connection()
         cursor = conn.cursor()
         query = "INSERT INTO users (name, email, password, department, year, photo_path) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (name, email, password, department, year, photo_filename))
+        cursor.execute(query, (name, email, password, department, year, qr_filename))
         conn.commit()
         cursor.close()
         conn.close()
+        session['user']=email
+        return redirect(url_for('dashboard'))
 
-        return "Signup successful!"  # or redirect to login or something
+        #return f"Signup successful! <br> <a href='{qr_url}' target='_blank'>View your QR code</a>"
 
     return render_template("SignUp.html")
 
