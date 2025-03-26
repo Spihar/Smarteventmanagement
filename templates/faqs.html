@@ -1,0 +1,164 @@
+<section class="faq-section">
+    <h2 class="faq-title">🌠 Frequently Asked Questions (FAQs) 🌠</h2>
+    <div class="faq-container">
+
+        <!-- FAQ Cards -->
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>🤖 What is TechXplore 2025?</h3>
+            </div>
+            <div class="faq-back">
+                <p>TechXplore 2025 is a tech innovation fest featuring AI, cybersecurity, IoT, robotics, and hands-on workshops.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>📅 How can I register for an event?</h3>
+            </div>
+            <div class="faq-back">
+                <p>Go to the <strong>Events</strong> page, select your event, and complete the registration process.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>📍 Where is the event happening?</h3>
+            </div>
+            <div class="faq-back">
+                <p>TechXplore 2025 will be hosted at <strong>BITS Hyderabad</strong>. Venue details are available on the event page.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>💰 Do I need to pay to participate?</h3>
+            </div>
+            <div class="faq-back">
+                <p>Some events are free, while others have an entry fee. Check the specific event page for details.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>💻 Can I participate in multiple events?</h3>
+            </div>
+            <div class="faq-back">
+                <p>Yes! You can register for multiple events as long as the schedules don’t overlap.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>🎟️ How do I get my event pass?</h3>
+            </div>
+            <div class="faq-back">
+                <p>After registration, you’ll receive a digital pass via email, which you must show at the venue for entry.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>🏆 Are there prizes for competitions?</h3>
+            </div>
+            <div class="faq-back">
+                <p>Yes! Winners get exciting cash prizes, certificates, and networking opportunities with top companies.</p>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-front">
+                <h3>📞 Who do I contact for support?</h3>
+            </div>
+            <div class="faq-back">
+                <p>For any queries, visit the <strong>Contact Support</strong> page or email us at interstellar@techxplore2025.com.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- 🎨 **Creative Styling with Black Background** -->
+<style>
+    /* Set Background to Black */
+    body {
+        background-color: black;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+    }
+
+    /* Title Styling */
+    .faq-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-shadow: 0 0 15px cyan;
+        margin-bottom: 30px;
+    }
+
+    /* FAQ Card Container */
+    .faq-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Flip Card Effect */
+    .faq-card {
+        width: 320px;
+        height: 200px;
+        perspective: 1000px;
+        cursor: pointer;
+    }
+
+    .faq-card:hover .faq-front {
+        transform: rotateY(180deg);
+    }
+
+    .faq-card:hover .faq-back {
+        transform: rotateY(0deg);
+    }
+
+    /* Front and Back Styling */
+    .faq-front, .faq-back {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        backface-visibility: hidden;
+        transition: transform 0.7s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    /* Front Side (Question) */
+    .faq-front {
+        background: rgba(10, 10, 10, 0.9);
+        border: 2px solid cyan;
+        box-shadow: 0 0 15px cyan;
+        color: white;
+        padding: 20px;
+    }
+
+    /* Back Side (Answer) */
+    .faq-back {
+        background: rgba(30, 30, 30, 0.9);
+        border: 2px solid lime;
+        box-shadow: 0 0 15px lime;
+        color: white;
+        font-size: 1rem;
+        padding: 20px;
+        transform: rotateY(180deg);
+    }
+
+    /* Glowing Hover Effect */
+    .faq-card:hover {
+        box-shadow: 0 0 20px cyan;
+    }
+</style>

@@ -137,9 +137,13 @@
             z-index: -1;
             background: #000;
         }
+       
+
+
     </style>
 </head>
 <body>
+    
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
             <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
@@ -148,10 +152,11 @@
         </div>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="homepage.html" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="" class="nav-link px-2">Events</a></li>
-            <li><a href="#" class="nav-link px-2">FAQs</a></li>
-            <li><a href="#" class="nav-link px-2">Contact Support</a></li>
+            
+            <li><a href="events.html" class="nav-link px-2">Events</a></li>
+            <li><a href="faqs.html" class="nav-link px-2">FAQs</a></li>
+            
+            <li><a href="contact_support.html" class="nav-link px-2">Contact Support</a></li>
         </ul>
 
         <div class="col-md-3 text-end" style="margin-right: 20px;">
@@ -271,7 +276,7 @@
                 }, 500);
             }
 
-            function handleEventSelection(event) {
+            function handleEventSelection(event){ 
                 selectedEvent = event;
                 appendMessage('You', event.name);
                 clearOptions();
@@ -427,5 +432,10 @@
             animate();
         });
     </script>
+    <footer class="text-center py-3 mt-4 border-top">
+    <p>&copy; 2025 TechXplore. All Rights Reserved.</p>
+    <p>Website designed and developed for TechXplore 2025. Unauthorized reproduction or distribution is prohibited.</p>
+</footer>
+
 </body>
 </html>

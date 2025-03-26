@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support | TechXplore 2025</title>
+    
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Page Title */
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 15px cyan;
+            margin-top: 20px;
+        }
+
+        /* Form Container */
+        .container {
+            width: 60%;
+            margin: auto;
+            padding: 30px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 15px cyan;
+            margin-top: 20px;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        label {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid cyan;
+            border-radius: 5px;
+            background: black;
+            color: white;
+            font-size: 1em;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        /* Hover & Focus Effect */
+        input:focus, textarea:focus {
+            border-color: lime;
+            box-shadow: 0 0 10px lime;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 2px solid cyan;
+            background: black;
+            color: cyan;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: cyan;
+            color: black;
+            box-shadow: 0 0 15px cyan;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            margin-top: 30px;
+            font-size: 1.2em;
+        }
+
+        .contact-info a {
+            color: cyan;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: lime;
+            text-shadow: 0 0 10px lime;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📞 Contact Support</h1>
+
+    <div class="container">
+        <form>
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Your Message:</label>
+                <textarea id="message" rows="4" placeholder="Describe your issue..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">🚀 Send Message</button>
+        </form>
+    </div>
+
+    <div class="contact-info">
+        <p>📩 Email: <a href="mailto:interstellar@techxplore2025.com">interstellar@techxplore2025.com</a></p>
+        <p>📞 Phone: <a href="tel:+123456789">91+9866721305</a></p>
+        <p>🌍 Website: <a href="https://techxplore2025.com">www.techxplore2025.com</a></p>
+    </div>
+
+</body>
+</html>
